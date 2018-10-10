@@ -18,6 +18,14 @@ public class Raum {
 	private Set<Kante> kanten;
 	private Set<Kugel> kugeln;
 	
+	/**
+	 * 
+	 * @param n
+	 * @param hoehe
+	 * @param breite
+	 * @param radius
+	 * @throws Exception
+	 */
 	public Raum(int n, int hoehe, int breite, double radius) throws Exception{
 		this.n = n;
 		this.radius = radius;
