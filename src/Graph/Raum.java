@@ -27,8 +27,12 @@ public class Raum {
 	 * @throws Exception
 	 */
 	public Raum(int n, int hoehe, int breite, double radius) throws Exception{
+		
 		this.n = n;
 		this.radius = radius;
+		this.breite = breite;
+		this.hoehe = hoehe;
+		
 		kugeln = new HashSet<>();
 		if(!verteileKugeln()) {
 			throw new Exceptions.KugelException("Die Kugeln konnten nicht"
@@ -82,23 +86,28 @@ public class Raum {
 	 * @return Wahrheitswert, ob das Verteilen erfolgreich war
 	 */
 	private boolean verteileKugeln() {
+		
 		int versuche = 200;
 		Random verteilung  = new Random(); 		// verwendet automatisch die aktuelle Systemzeit als Seed
+
 		do
 		{
 			int x = verteilung.nextInt(this.breite);
 			int y = verteilung.nextInt(this.hoehe);
+
 			if(istImRaum(x, y, this.radius)) {
 				kugeln.add(new Kugel(x, y, this.radius));
 			}
 			else {
 				versuche--;
 			}
+			
 		}while(versuche > 0 && kugeln.size() < this.n);
 		
 		if(kugeln.size() == this.n) {
 			return true;
 		}
+		
 		return false;
 	}
 }
