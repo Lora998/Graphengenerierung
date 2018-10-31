@@ -90,20 +90,19 @@ public class Raum {
 		int versuche = 200;
 		Random verteilung  = new Random(); 		// verwendet automatisch die aktuelle Systemzeit als Seed
 
-		do
-		{
-			int x = verteilung.nextInt(this.breite);
-			int y = verteilung.nextInt(this.hoehe);
-
-			if(istImRaum(x, y, this.radius)) {
+		
+		 while(kugeln.size() < this.n && versuche > 0) {
+			 
+			 int x = verteilung.nextInt(this.breite);
+			 int y = verteilung.nextInt(this.hoehe);
+			 
+			 if(istImRaum(x, y, this.radius)) {
 				kugeln.add(new Kugel(x, y, this.radius));
-			}
-			else {
+			} else {
 				versuche--;
 			}
-			
-		}while(versuche > 0 && kugeln.size() < this.n);
-		
+		 }
+		 
 		if(kugeln.size() == this.n) {
 			return true;
 		}
