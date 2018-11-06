@@ -29,12 +29,13 @@ public class Main extends Application {
 		this.fenster.setTitle("Graphengenerierung");
 		Pane hauptFenster = new Pane();
 		hauptFenster.setPadding(new Insets(8, 8, 8, 8));
-		this.raum = new Raum(0, 800, 100, 1);
+		this.raum = new Raum(0, 500, 500, 10);
 		
 		/*
 		 *erstellt Buttonleiste fuer grundlegende Funktionen 
 		 */
 		HBox buttonLeiste = new HBox();
+		buttonLeiste.getStyleClass().add("hbox");
 		buttonLeiste.setSpacing(15);
 		Button neuerGraphButton = new Button("Neu");
 		Button beendenButton = new Button("Beenden");
@@ -44,12 +45,16 @@ public class Main extends Application {
 		
 		Zeichenwand z = new Zeichenwand(this.raum);
 		Pane tmp = new Pane();
+		tmp.getStyleClass().add("pane");
+		tmp.setMaxSize(this.raum.getBreite(), this.raum.getHoehe());
 		tmp.getChildren().add(z);
 		BorderPane.setAlignment(tmp, Pos.BOTTOM_CENTER);
+		
+		
 		BorderPane layout = new BorderPane(tmp, buttonLeiste, null, null, null);
-	//	hauptFenster.getChildren().addAll(buttonLeiste, tmp);
-		//this.fenster.setScene(new Scene(hauptFenster, 400, 400, Color.BLACK));
-		this.fenster.setScene(new Scene(layout));
+		Scene scene = new Scene(layout);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		this.fenster.setScene(scene);
 		this.fenster.setResizable(false);
 		this.fenster.show();
 	}	

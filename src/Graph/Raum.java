@@ -100,6 +100,7 @@ public class Raum {
 				kugeln.add(new Kugel(x, y, this.radius));
 			} else {
 				versuche--;
+				System.out.println("x = "+x+"\t y = "+y);
 			}
 		 }
 		 

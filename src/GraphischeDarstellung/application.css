@@ -1,3 +1,12 @@
-.Zeichenwand{
-	-fx-background-color:  black;
+.hbox {
+    -fx-background-color: lightsteelblue;
+}
+
+.button {
+	-fx-background-color: 	transparent ;
+	-fx-font: 20px Tahoma;
+}
+
+.pane {
+	-fx-background-color: ghostwhite;
 }
