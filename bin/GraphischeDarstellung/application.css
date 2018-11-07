@@ -1,10 +1,13 @@
 .hbox {
-    -fx-background-color: lightsteelblue;
+    -fx-background-color: lightgrey;
 }
 
 .button {
-	-fx-background-color: 	transparent ;
-	-fx-font: 20px Tahoma;
+	-fx-padding: 6px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+	-fx-font: 18 arial;
+	
 }
 
 .pane {

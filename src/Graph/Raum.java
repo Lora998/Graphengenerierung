@@ -60,11 +60,18 @@ public class Raum {
 		return kugeln;
 	}
 
-
-
 	public void setKugeln(Set<Kugel> kugeln) {
 		this.kugeln = kugeln;
 	}
+	
+	public int getN() {
+		return n;
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
 
 	/**
 	 * 
