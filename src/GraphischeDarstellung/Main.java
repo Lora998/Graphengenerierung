@@ -2,14 +2,15 @@ package GraphischeDarstellung;
 	
 import java.util.Optional;
 
-import Exceptions.KugelException;
+
 import Graph.Raum;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -23,16 +24,20 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 
 
 public class Main extends Application {
 	
 	Stage fenster;
 	Raum raum;
+	Zeichenwand zeichenwand;
+	HBox buttonLeiste;
+	Pane zeichenPane;
+	Scene scene;
+	BorderPane layout;
+	
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception{
@@ -48,7 +53,7 @@ public class Main extends Application {
 		/*
 		 *erstellt Buttonleiste fuer grundlegende Funktionen 
 		 */
-		HBox buttonLeiste = new HBox();
+		buttonLeiste = new HBox();
 		buttonLeiste.getStyleClass().add("hbox");
 		
 		Button neuerGraphButton = new Button("Neu");
@@ -112,6 +117,7 @@ public class Main extends Application {
 							ungueltigeEingabeNachricht.setContentText("Die angegebenen Werte"
 									+ " sind ungültig.");
 							ungueltigeEingabeNachricht.showAndWait();
+							System.out.println(e.getMessage());
 						}
 		
 					}
@@ -123,6 +129,9 @@ public class Main extends Application {
 			
 			if(ergebnis.isPresent()) {
 				this.raum = ergebnis.get();
+				zeichenwand.neuerRaum(this.raum);
+				zeichenPane.setMaxSize(this.raum.getBreite(), this.raum.getHoehe());
+				this.fenster.sizeToScene();
 				dialog.close();
 			}
 			
@@ -147,22 +156,41 @@ public class Main extends Application {
 		BorderPane.setAlignment(buttonLeiste, Pos.TOP_CENTER);
 		
 		
-		Zeichenwand z = new Zeichenwand(this.raum);
-		Pane zeichenPane = new Pane();
+		zeichenwand = new Zeichenwand(this.raum);
+		zeichenPane = new Pane();
 		zeichenPane.getStyleClass().add("pane");
 		zeichenPane.setMaxSize(this.raum.getBreite(), this.raum.getHoehe());
-		zeichenPane.getChildren().add(z);
+		zeichenPane.getChildren().add(zeichenwand);
 		BorderPane.setAlignment(zeichenPane, Pos.BOTTOM_CENTER);
 		
 		
-		BorderPane layout = new BorderPane(zeichenPane, buttonLeiste, null, null, null);
-		Scene scene = new Scene(layout);
+		layout = new BorderPane(zeichenPane, buttonLeiste, null, null, null);
+		scene = new Scene(layout);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		
+
+		this.fenster.setOnCloseRequest((WindowEvent e) -> {
+			Alert beendeNachricht = new Alert(AlertType.CONFIRMATION);
+			beendeNachricht.setTitle("Beenden");
+			String nachricht = "Wollen Sie die Anwendung wirklich beenden?";
+			beendeNachricht.setContentText(nachricht);
+			Optional<ButtonType> antwort = beendeNachricht.showAndWait();
+			
+			if( antwort.isPresent() && antwort.get() == ButtonType.OK) {
+				System.exit(0);
+			}
+			else {
+				e.consume();
+			}
+		});
+		
 		this.fenster.setScene(scene);
 		this.fenster.setResizable(false);
 		this.fenster.show();
 		
 	}	
+	
+	
 	
 	public static void main(String[] args) {
 		launch(args);

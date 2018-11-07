@@ -29,4 +29,12 @@ public class Zeichenwand extends Canvas{
 		}
 	}
 	
+	public void neuerRaum(Raum r) {
+		this.raum = r;
+		this.setWidth(raum.getBreite());
+		this.setHeight(raum.getHoehe());
+		gc.clearRect(0, 0, this.getWidth(), this.getHeight());
+		zeichneKugeln();
+	}
+	
 }
