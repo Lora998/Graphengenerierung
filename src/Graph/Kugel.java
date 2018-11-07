@@ -8,8 +8,9 @@ package Graph;
 public class Kugel {
 	private double radius;
 	private Position position;
+	private Kante kante;
 	
-	public Kugel(int x, int y, double radius) {
+	public Kugel(double x, double y, double radius) {
 		this.position = new Position(x, y);
 		this.radius = radius;
 	}

@@ -6,10 +6,10 @@ package Graph;
  */
 
 public class Position {
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 	
-	public Position(int x, int y) {
+	public Position(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -28,11 +28,11 @@ public class Position {
 		this.y = 0;
 	}
 	
-	public int getX() {
+	public double getX() {
 		return this.x;
 	}
 	
-	public int getY() {
+	public double getY() {
 		return this.y;
 	}
 	
@@ -43,6 +43,6 @@ public class Position {
 	 * @return
 	 */
 	public static double getDistance(Position a, Position b) {
-		return Math.sqrt((double)((a.getX()-b.getX()) * (a.getX()-b.getX()) + (a.getY()-b.getY()) * (a.getY()-b.getY())));
+		return Math.sqrt(((a.getX()-b.getX()) * (a.getX()-b.getX()) + (a.getY()-b.getY()) * (a.getY()-b.getY())));
 	}
 }

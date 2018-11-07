@@ -11,11 +11,10 @@ import java.util.Set;
  */
 public class Raum {
 	
-	private int hoehe;
-	private int breite;
+	private double hoehe;
+	private double breite;
 	private int n; 		// Anzahl der Kugeln
 	private double radius;
-	private Set<Kante> kanten;
 	private Set<Kugel> kugeln;
 	
 	/**
@@ -26,7 +25,7 @@ public class Raum {
 	 * @param radius
 	 * @throws Exception
 	 */
-	public Raum(int n, int hoehe, int breite, double radius) throws Exception{
+	public Raum(int n, double hoehe, double breite, double radius) throws Exception{
 		
 		this.n = n;
 		this.radius = radius;
@@ -40,28 +39,16 @@ public class Raum {
 		}
 	}
 	
-	public int getHoehe() {
+	public double getHoehe() {
 		return hoehe;
 	}
 
-	public void setHoehe(int hoehe) {
-		this.hoehe = hoehe;
-	}
-
-	public int getBreite() {
+	public double getBreite() {
 		return breite;
-	}
-
-	public void setBreite(int breite) {
-		this.breite = breite;
 	}
 
 	public Set<Kugel> getKugeln() {
 		return kugeln;
-	}
-
-	public void setKugeln(Set<Kugel> kugeln) {
-		this.kugeln = kugeln;
 	}
 	
 	public int getN() {
@@ -80,9 +67,8 @@ public class Raum {
 	 * @param radius
 	 * @return Wahrheitswert, ob die Kugel innerhalb der Grenzen liegen
 	 */
-	private boolean istImRaum(int x, int y, double radius) {
-		if(Math.round(x-radius) < 0 || Math.round(y-radius) < 0 ||
-				Math.round(x+radius) > this.breite || Math.round(y+radius) > hoehe) {
+	private boolean istImRaum(double x, double y, double radius) {
+		if(x-radius < 0 || y-radius < 0 || x+radius > this.breite || y+radius > hoehe) {
 			return false;
 		}
 		return true;
@@ -94,14 +80,14 @@ public class Raum {
 	 */
 	private boolean verteileKugeln() {
 		
-		int versuche = 200;
+		int versuche = 1000;
 		Random verteilung  = new Random(); 		// verwendet automatisch die aktuelle Systemzeit als Seed
 
 		
 		 while(kugeln.size() < this.n && versuche > 0) {
 			 
-			 int x = verteilung.nextInt(this.breite);
-			 int y = verteilung.nextInt(this.hoehe);
+			 double x = verteilung.nextDouble() * this.breite;
+			 double y = verteilung.nextDouble() * this.hoehe;
 			 
 			 if(istImRaum(x, y, this.radius)) {
 				kugeln.add(new Kugel(x, y, this.radius));

@@ -8,5 +8,5 @@ import java.util.List;
  *
  */
 public class Kante {
-	private List<Knoten> knoten;
+	private List<Position> knoten;
 }

@@ -63,9 +63,9 @@ public class Main extends Application {
 			dialog.setHeaderText("Neue Werte eingeben:");
 			
 			Label breite_label = new Label("Breite: ");
-			TextField breite_text = new TextField(Integer.toString(this.raum.getBreite()));
+			TextField breite_text = new TextField(Double.toString(this.raum.getBreite()));
 			Label hoehe_label = new Label("Höhe: ");
-			TextField hoehe_text = new TextField(Integer.toString(this.raum.getHoehe()));
+			TextField hoehe_text = new TextField(Double.toString(this.raum.getHoehe()));
 			Label radius_label = new Label("Radius: ");
 			TextField radius_text = new TextField(Double.toString(this.raum.getRadius()));
 			Label anzahl_label = new Label("Anzahl der Kugeln");
@@ -90,14 +90,14 @@ public class Main extends Application {
 				public Raum call(ButtonType b) {
 					if(b==buttonTypeStart) {
 						try {
-							if( Integer.parseInt(breite_text.getText()) > 0 &&
-									Integer.parseInt(hoehe_text.getText()) > 0 &&
+							if( Double.parseDouble(breite_text.getText()) > 0 &&
+									Double.parseDouble(hoehe_text.getText()) > 0 &&
 									Double.parseDouble(radius_text.getText()) > 0 &&
 									Integer.parseInt(anzahl_text.getText()) >= 0) {
 								
 								Raum r = new Raum(Integer.parseInt(anzahl_text.getText()),
-										Integer.parseInt(hoehe_text.getText()),
-										Integer.parseInt(breite_text.getText()),
+										Double.parseDouble(hoehe_text.getText()),
+										Double.parseDouble(breite_text.getText()),
 										Double.parseDouble(radius_text.getText()));
 								return r;
 								
@@ -189,7 +189,6 @@ public class Main extends Application {
 		this.fenster.show();
 		
 	}	
-	
 	
 	
 	public static void main(String[] args) {
