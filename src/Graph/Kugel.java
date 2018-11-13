@@ -1,5 +1,8 @@
 package Graph;
 
+
+import java.util.Set;
+
 /**
  * Klasse um Kugelobjekte darzustellen
  * @author l.hofer
@@ -8,7 +11,7 @@ package Graph;
 public class Kugel {
 	private double radius;
 	private Position position;
-	private Kante kante;
+	private Set<Kante> kanten;
 	
 	public Kugel(double x, double y, double radius) {
 		this.position = new Position(x, y);

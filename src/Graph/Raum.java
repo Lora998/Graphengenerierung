@@ -103,4 +103,8 @@ public class Raum {
 		
 		return false;
 	}
+	
+	private void findeGraphen() {
+		Knoten[][]  knoten = new Knoten[(int)(this.breite*10)][(int) (this.hoehe*10)];
+	}
 }
