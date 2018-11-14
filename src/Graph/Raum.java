@@ -106,49 +106,53 @@ public class Raum {
 		return false;
 	}
 	
+	/**
+	 * berechnet den Graphen durch die Kugeln
+	 */
 	private void findeGraphen() {
 		Knoten[][]  knoten = new Knoten[(int)(this.breite*10)][(int) (this.hoehe*10)];
 		for(Kugel k: kugeln) {
 			
+			/**
+			 * nutzt Bresenham-Algorithmus um auf dem Array die Außenlgrenzen der Kugeln zu makieren
+			 */
+			
 			int x0 = (int)k.getPosition().getX()*10, y0 = (int)k.getPosition().getY()*10, radius = (int) k.getRadius()*10;
 			int f = 1-radius, ddF_x = 0, ddf_y = -2*radius, x = 0, y = radius;
 			
-			knoten[x0][y0+radius] = new Knoten(new Position(x0,  y0), k);
-			knoten[x0][y0-radius] = '0';
-			knoten[x0+radius][y0] = '0';
-			knoten[x0-radius][y0] = '0';
-		}
-		
-		
-		
-		
-		
-		while(x < y) {
-			if(f >= 0) {
-				y--;
-				ddf_y +=2;
-				f+= ddf_y;
-			}
-			x++;
-			ddF_x += 2;
-			f += ddF_x+1;
+			knoten[x0][y0+radius] = new Knoten(new Position(x0, y0+radius), k);
+			knoten[x0][y0-radius] = new Knoten(new Position(x0, y0-radius), k);
+			knoten[x0+radius][y0] = new Knoten(new Position(x0+radius, y0), k);
+			knoten[x0-radius][y0] = new Knoten(new Position(x0-radius, y0), k);
 			
-			knoten[x0+x][y0+y] = '0';
-			knoten[x0-x][y0+y] = '0';
-			knoten[x0+x][y0-y] = '0';
-			knoten[x0-x][y0-y] = '0';
-			knoten[x0+y][y0+x] = '0';
-			knoten[x0-y][y0+x] = '0';
-			knoten[x0+y][y0-x] = '0';
-			knoten[x0-y][y0-x] = '0';
+			while(x < y) {
+				if(f >= 0) {
+					y--;
+					ddf_y +=2;
+					f+= ddf_y;
+				}
+				x++;
+				ddF_x += 2;
+				f += ddF_x+1;
+				
+				knoten[x0+x][y0+y] = new Knoten(new Position(x0+x, y0+y), k);
+				knoten[x0-x][y0+y] = new Knoten(new Position(x0-x, y0+y), k);
+				knoten[x0+x][y0-y] = new Knoten(new Position(x0+x, y0-y), k);
+				knoten[x0-x][y0-y] = new Knoten(new Position(x0-x, y0-y), k);
+				knoten[x0+y][y0+x] = new Knoten(new Position(x0+y, y0+x), k);
+				knoten[x0-y][y0+x] = new Knoten(new Position(x0-y, y0+x), k);
+				knoten[x0+y][y0-x] = new Knoten(new Position(x0+y, y0-x), k);
+				knoten[x0-y][y0-x] = new Knoten(new Position(x0-y, y0-x), k);
+			}
+			
 		}
 		
-		for(int i = 0; i < knoten.length; i++) {
-			for(int j = 0; j < knoten[0].length; j++) {
-				System.out.print(knoten[i][j]);
-			}
-			System.out.println();
-		}
+		
+		
+		
+	}
+	
+	private void fuelleInnereKugel(Kugel k, Knoten[][] knoten) {
 		
 	}
 }
