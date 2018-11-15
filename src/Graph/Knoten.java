@@ -38,7 +38,7 @@ public class Knoten {
 	public Knoten(Knoten k) {
 		this.position = new Position(k.getPosition());
 		zugehoerigeKugeln = new HashSet<>(k.getZugehoerigeKugeln());
-		istTeilDerKugel = k.istTeilDerKugel();
+		istTeilDerKugel = k.istTeilderKugel();
 	}
 	
 	public boolean istTeilderKugel() {

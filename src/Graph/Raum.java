@@ -121,11 +121,17 @@ public class Raum {
 			
 			int x0 = (int)k.getPosition().getX()*10, y0 = (int)k.getPosition().getY()*10, radius = (int) k.getRadius()*10;
 			int f = 1-radius, ddF_x = 0, ddf_y = -2*radius, x = 0, y = radius;
+			HashSet<Position> aussenrand = new HashSet<>();
 			
 			knoten[x0][y0+radius] = new Knoten(new Position(x0, y0+radius), k, true);
 			knoten[x0][y0-radius] = new Knoten(new Position(x0, y0-radius), k, true);
 			knoten[x0+radius][y0] = new Knoten(new Position(x0+radius, y0), k, true);
 			knoten[x0-radius][y0] = new Knoten(new Position(x0-radius, y0), k, true);
+			
+			aussenrand.add(new Position(x0, y0+radius));
+			aussenrand.add(new Position(x0, y0-radius));
+			aussenrand.add(new Position(x0+radius, y0));
+			aussenrand.add(new Position(x0-radius, y0));
 			
 			while(x < y) {
 				if(f >= 0) {
@@ -141,13 +147,35 @@ public class Raum {
 				knoten[x0-x][y0+y] = new Knoten(new Position(x0-x, y0+y), k, true);
 				knoten[x0+x][y0-y] = new Knoten(new Position(x0+x, y0-y), k, true);
 				knoten[x0-x][y0-y] = new Knoten(new Position(x0-x, y0-y), k, true);
+				
 				knoten[x0+y][y0+x] = new Knoten(new Position(x0+y, y0+x), k, true);
 				knoten[x0-y][y0+x] = new Knoten(new Position(x0-y, y0+x), k, true);
 				knoten[x0+y][y0-x] = new Knoten(new Position(x0+y, y0-x), k, true);
 				knoten[x0-y][y0-x] = new Knoten(new Position(x0-y, y0-x), k, true);
+				
+				aussenrand.add(new Position(x0+x, y0+y));
+				aussenrand.add(new Position(x0-x, y0+y));
+				aussenrand.add(new Position(x0+x, y0-y));
+				aussenrand.add(new Position(x0-x, y0-y));
+				aussenrand.add(new Position(x0+y, y0+x));
+				aussenrand.add(new Position(x0-y, y0+x));
+				aussenrand.add(new Position(x0+y, y0-x));
+				aussenrand.add(new Position(x0-y, y0-x));
+				
 			}
 			
 			fuelleInnereKugel(k, knoten, x0, y0, radius);
+			k.setAussenrand(aussenrand);
+			
+		}
+		
+		//mus getrennt werden, damit das innere der Kugeln bereits komplett ausgefüllt ist
+		 
+		for(Kugel k: kugeln) {
+			
+			for(Position p: k.getAussenrand()) {
+				
+			}
 			
 		}
 		

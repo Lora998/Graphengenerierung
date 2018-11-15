@@ -12,6 +12,7 @@ public class Kugel {
 	private double radius;
 	private Position position;
 	private Set<Kante> kanten;
+	private Set<Position> aussenrand;
 	
 	public Kugel(double x, double y, double radius) {
 		this.position = new Position(x, y);
@@ -33,6 +34,14 @@ public class Kugel {
 	
 	public double getRadius() {
 		return this.radius;
+	}
+	
+	public void setAussenrand(Set<Position> a) {
+		this.aussenrand = a;
+	}
+	
+	public Set<Position> getAussenrand(){
+		return this.aussenrand;
 	}
 	 /**
 	  * berechnet, ob sich zwei Kugeln schneiden, bzw. beruehren
