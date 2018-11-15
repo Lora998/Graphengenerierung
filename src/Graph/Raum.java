@@ -2,8 +2,10 @@ package Graph;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
+import java.util.Queue;
 
 /**
  * 
@@ -120,10 +122,10 @@ public class Raum {
 			int x0 = (int)k.getPosition().getX()*10, y0 = (int)k.getPosition().getY()*10, radius = (int) k.getRadius()*10;
 			int f = 1-radius, ddF_x = 0, ddf_y = -2*radius, x = 0, y = radius;
 			
-			knoten[x0][y0+radius] = new Knoten(new Position(x0, y0+radius), k);
-			knoten[x0][y0-radius] = new Knoten(new Position(x0, y0-radius), k);
-			knoten[x0+radius][y0] = new Knoten(new Position(x0+radius, y0), k);
-			knoten[x0-radius][y0] = new Knoten(new Position(x0-radius, y0), k);
+			knoten[x0][y0+radius] = new Knoten(new Position(x0, y0+radius), k, true);
+			knoten[x0][y0-radius] = new Knoten(new Position(x0, y0-radius), k, true);
+			knoten[x0+radius][y0] = new Knoten(new Position(x0+radius, y0), k, true);
+			knoten[x0-radius][y0] = new Knoten(new Position(x0-radius, y0), k, true);
 			
 			while(x < y) {
 				if(f >= 0) {
@@ -135,24 +137,57 @@ public class Raum {
 				ddF_x += 2;
 				f += ddF_x+1;
 				
-				knoten[x0+x][y0+y] = new Knoten(new Position(x0+x, y0+y), k);
-				knoten[x0-x][y0+y] = new Knoten(new Position(x0-x, y0+y), k);
-				knoten[x0+x][y0-y] = new Knoten(new Position(x0+x, y0-y), k);
-				knoten[x0-x][y0-y] = new Knoten(new Position(x0-x, y0-y), k);
-				knoten[x0+y][y0+x] = new Knoten(new Position(x0+y, y0+x), k);
-				knoten[x0-y][y0+x] = new Knoten(new Position(x0-y, y0+x), k);
-				knoten[x0+y][y0-x] = new Knoten(new Position(x0+y, y0-x), k);
-				knoten[x0-y][y0-x] = new Knoten(new Position(x0-y, y0-x), k);
+				knoten[x0+x][y0+y] = new Knoten(new Position(x0+x, y0+y), k, true);
+				knoten[x0-x][y0+y] = new Knoten(new Position(x0-x, y0+y), k, true);
+				knoten[x0+x][y0-y] = new Knoten(new Position(x0+x, y0-y), k, true);
+				knoten[x0-x][y0-y] = new Knoten(new Position(x0-x, y0-y), k, true);
+				knoten[x0+y][y0+x] = new Knoten(new Position(x0+y, y0+x), k, true);
+				knoten[x0-y][y0+x] = new Knoten(new Position(x0-y, y0+x), k, true);
+				knoten[x0+y][y0-x] = new Knoten(new Position(x0+y, y0-x), k, true);
+				knoten[x0-y][y0-x] = new Knoten(new Position(x0-y, y0-x), k, true);
 			}
+			
+			fuelleInnereKugel(k, knoten, x0, y0, radius);
 			
 		}
 		
 		
-		
-		
 	}
 	
-	private void fuelleInnereKugel(Kugel k, Knoten[][] knoten) {
+	private void fuelleInnereKugel(Kugel k, Knoten[][] knoten, int x0, int y0, int radius) {
+		
+		// Mittelpunkt makieren
+		Position mittelpunkt = new Position(x0, y0);
+		knoten[x0][y0] = new Knoten(mittelpunkt, k, true);
+		
+		if(radius <= 1) {
+			return;
+		}
+		
+		Queue<Position> nochZuMakieren = new LinkedList<Position>();
+		
+		// oben, unten, rechts, links vom Punkt in die queue
+		
+		nochZuMakieren.offer(new Position(x0, y0+1));
+		nochZuMakieren.offer(new Position(x0, y0-1));
+		nochZuMakieren.offer(new Position(x0+1, y0));
+		nochZuMakieren.offer(new Position(x0-1, y0));
+		
+		while( !nochZuMakieren.isEmpty()) {
+			Position p = nochZuMakieren.poll();
+			if(knoten[(int)p.getX()][(int)p.getY()] != null) {
+				continue;
+			}
+			else {
+				knoten[(int)p.getX()][(int)p.getY()] = new Knoten(p, k, true);
+				
+				nochZuMakieren.offer(new Position(p.getX(), p.getY()+1));
+				nochZuMakieren.offer(new Position(p.getX(), p.getY()-1));
+				nochZuMakieren.offer(new Position(p.getX()+1, p.getY()));
+				nochZuMakieren.offer(new Position(p.getX()-1, p.getY()));
+				
+			}
+		}
 		
 	}
 }
