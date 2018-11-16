@@ -1,8 +1,10 @@
 package Graph;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Queue;
@@ -169,13 +171,28 @@ public class Raum {
 			
 		}
 		
-		//mus getrennt werden, damit das innere der Kugeln bereits komplett ausgefüllt ist
+		//muss getrennt werden, damit das innere der Kugeln bereits komplett ausgefüllt ist
 		 
+		Queue<Position> mglGraphenPunkte = new LinkedList<>();
+		List<Position> graphenPunkte = new ArrayList<>();
+		// Aussenrand aller Kugeln in die Queue
+		
 		for(Kugel k: kugeln) {
-			
+			int x0 = (int)k.getPosition().getX()*10, y0 = (int)k.getPosition().getY()*10, radius = (int) k.getRadius()*10;
 			for(Position p: k.getAussenrand()) {
 				
-			}
+				// bei der Position direkt über oder unter der Kugel
+				if(p.getX() == x0) {
+					if(p.getY() == y0+radius ) {
+						mglGraphenPunkte.add(new Position(p.getX(), p.getY()+1));
+					}
+					
+				}
+				else {
+					
+				}
+				
+		 	}
 			
 		}
 		
@@ -217,5 +234,8 @@ public class Raum {
 			}
 		}
 		
+		
 	}
+	
+
 }

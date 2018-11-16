@@ -118,6 +118,7 @@ public class Main extends Application {
 									+ " sind ungültig.");
 							ungueltigeEingabeNachricht.showAndWait();
 							System.out.println(e.getMessage());
+							e.printStackTrace();
 						}
 		
 					}
