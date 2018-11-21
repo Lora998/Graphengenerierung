@@ -169,11 +169,12 @@ public class Raum {
 			fuelleInnereKugel(k, knoten, x0, y0, radius);
 			k.setAussenrand(aussenrand);
 			
+			
 		}
 		
 		//muss getrennt werden, damit das innere der Kugeln bereits komplett ausgefüllt ist
-		 
-		Queue<Position> mglGraphenPunkte = new LinkedList<>();
+		
+		/*Queue<Position> mglGraphenPunkte = new LinkedList<>();
 		List<Position> graphenPunkte = new ArrayList<>();
 		// Aussenrand aller Kugeln in die Queue
 		
@@ -186,15 +187,22 @@ public class Raum {
 					if(p.getY() == y0+radius ) {
 						mglGraphenPunkte.add(new Position(p.getX(), p.getY()+1));
 					}
-					
+					else {
+						mglGraphenPunkte.add(new Position(p.getX(), p.getY()-1));
+					}
 				}
 				else {
+						
+					if(p.getX() < x0) {	
+						//links von
+						mglGraphenPunkte.add(new Position(p.getX(), p.getY()));
+					}
 					
 				}
 				
 		 	}
 			
-		}
+		}*/
 		
 		
 	}
@@ -224,13 +232,26 @@ public class Raum {
 				continue;
 			}
 			else {
+				// Knoten makieren
 				knoten[(int)p.getX()][(int)p.getY()] = new Knoten(p, k, true);
 				
-				nochZuMakieren.offer(new Position(p.getX(), p.getY()+1));
-				nochZuMakieren.offer(new Position(p.getX(), p.getY()-1));
-				nochZuMakieren.offer(new Position(p.getX()+1, p.getY()));
-				nochZuMakieren.offer(new Position(p.getX()-1, p.getY()));
-				
+				Position oben = new Position(p.getX(), p.getY()+1);
+				Position unten = new Position(p.getX(), p.getY()-1);
+				Position rechts = new Position(p.getX()+1, p.getY());
+				Position links = new Position(p.getX()-1, p.getY());
+				 // umherliegende Punkte makieren
+				if(!nochZuMakieren.contains(oben)) {
+					nochZuMakieren.add(oben);
+				}
+				if(!nochZuMakieren.contains(unten)) {
+					nochZuMakieren.add(unten);
+				}
+				if(!nochZuMakieren.contains(rechts)) {
+					nochZuMakieren.add(rechts);
+				}
+				if(!nochZuMakieren.contains(links)) {
+					nochZuMakieren.add(links);
+				}
 			}
 		}
 		
