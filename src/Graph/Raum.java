@@ -21,6 +21,8 @@ public class Raum {
 	private int n; 		// Anzahl der Kugeln
 	private double radius;
 	private Set<Kugel> kugeln;
+	private List<Position> graphenPunkte;
+	
 	
 	/**
 	 * 
@@ -174,8 +176,8 @@ public class Raum {
 		
 		//muss getrennt werden, damit das innere der Kugeln bereits komplett ausgefüllt ist
 		
-		/*Queue<Position> mglGraphenPunkte = new LinkedList<>();
-		List<Position> graphenPunkte = new ArrayList<>();
+		Queue<Knoten> mglGraphenPunkte = new LinkedList<>();
+		graphenPunkte = new ArrayList<>();
 		// Aussenrand aller Kugeln in die Queue
 		
 		for(Kugel k: kugeln) {
@@ -185,27 +187,42 @@ public class Raum {
 				// bei der Position direkt über oder unter der Kugel
 				if(p.getX() == x0) {
 					if(p.getY() == y0+radius ) {
-						mglGraphenPunkte.add(new Position(p.getX(), p.getY()+1));
+						mglGraphenPunkte.add(new Knoten(new Position(p.getX(), p.getY()+1), k, false));
 					}
 					else {
-						mglGraphenPunkte.add(new Position(p.getX(), p.getY()-1));
+						mglGraphenPunkte.add(new Knoten(new Position(p.getX(), p.getY()-1), k, false));
 					}
 				}
 				else {
 						
 					if(p.getX() < x0) {	
 						//links von
-						mglGraphenPunkte.add(new Position(p.getX(), p.getY()));
+						mglGraphenPunkte.add(new Knoten(new Position(p.getX()-1, p.getY()), k, false));
+					}
+					else {
+						// rechts von
+						mglGraphenPunkte.add(new Knoten(new Position(p.getX()+1, p.getY()), k, false));
 					}
 					
 				}
 				
 		 	}
 			
-		}*/
+		}
 		
 		
 	}
+	
+	/**
+	 * Füllt das Innere einer übergeben Kugel
+	 * @param k
+	 * mithilfe von
+	 * @param x0
+	 * @param y0
+	 * @param radius
+	 * in 
+	 * @param knoten
+	 */
 	
 	private void fuelleInnereKugel(Kugel k, Knoten[][] knoten, int x0, int y0, int radius) {
 		
@@ -256,6 +273,19 @@ public class Raum {
 		}
 		
 		
+	}
+	
+	
+	/**
+	 * 
+	 * @param mglGraphenPunkte
+	 * @param knoten
+	 */
+	
+	private void findeKnoten(Queue<Knoten> mglGraphenPunkte, Knoten[][] knoten) {
+		while(!mglGraphenPunkte.isEmpty()) {
+			
+		}
 	}
 	
 
