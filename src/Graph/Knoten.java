@@ -41,6 +41,10 @@ public class Knoten {
 		istTeilDerKugel = k.istTeilderKugel();
 	}
 	
+	public void addKugel(Kugel k) {
+		this.zugehoerigeKugeln.add(k);
+	}
+	
 	public boolean istTeilderKugel() {
 		return this.istTeilDerKugel;
 	}

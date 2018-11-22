@@ -187,21 +187,21 @@ public class Raum {
 				// bei der Position direkt über oder unter der Kugel
 				if(p.getX() == x0) {
 					if(p.getY() == y0+radius ) {
-						mglGraphenPunkte.add(new Knoten(new Position(p.getX(), p.getY()+1), k, false));
+						mglGraphenPunkte.offer(new Knoten(new Position(p.getX(), p.getY()+1), k, false));
 					}
 					else {
-						mglGraphenPunkte.add(new Knoten(new Position(p.getX(), p.getY()-1), k, false));
+						mglGraphenPunkte.offer(new Knoten(new Position(p.getX(), p.getY()-1), k, false));
 					}
 				}
 				else {
 						
 					if(p.getX() < x0) {	
 						//links von
-						mglGraphenPunkte.add(new Knoten(new Position(p.getX()-1, p.getY()), k, false));
+						mglGraphenPunkte.offer(new Knoten(new Position(p.getX()-1, p.getY()), k, false));
 					}
 					else {
 						// rechts von
-						mglGraphenPunkte.add(new Knoten(new Position(p.getX()+1, p.getY()), k, false));
+						mglGraphenPunkte.offer(new Knoten(new Position(p.getX()+1, p.getY()), k, false));
 					}
 					
 				}
@@ -281,10 +281,30 @@ public class Raum {
 	 * @param mglGraphenPunkte
 	 * @param knoten
 	 */
-	
+	 //TODO
 	private void findeKnoten(Queue<Knoten> mglGraphenPunkte, Knoten[][] knoten) {
+		
 		while(!mglGraphenPunkte.isEmpty()) {
 			
+			Knoten tmp = mglGraphenPunkte.poll();
+			int x = (int)tmp.getPosition().getX();
+			int y = (int)tmp.getPosition().getY();
+			
+			if(x < 0 || x >= knoten.length || y < 0 || y >= knoten[0].length) {
+				continue;
+			}
+			
+			if(knoten[x][y] == null) {
+				
+				knoten[x][y] = tmp;
+				
+				mglGraphenPunkte.offer(new Knoten(new Position(x, y+1), knoten[x][y].getZugehoerigeKugeln(), false));
+			}
+			else {
+				if(knoten[x][y].istTeilderKugel()) {
+					continue;
+				}
+			}
 		}
 	}
 	
