@@ -3,6 +3,7 @@ package GraphischeDarstellung;
 
 
 import Graph.Kugel;
+import Graph.Position;
 import Graph.Raum;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,15 +18,25 @@ public class Zeichenwand extends Canvas{
 		this.raum = r;
 		this.gc = this.getGraphicsContext2D();
 		zeichneKugeln();
+		zeichneGraphen();
 	
 	}
 	
 	private void zeichneKugeln() {
+		this.gc.setStroke(Color.BLACK);
 		for(Kugel kugel: raum.getKugeln()) {
 			double radius = kugel.getRadius();
 			this.gc.strokeOval(kugel.getPosition().getX()-radius, 
 					kugel.getPosition().getY()-radius,
 					radius, radius);
+		}
+	}
+	
+	private void zeichneGraphen() {
+		this.gc.setStroke(Color.RED);
+		for(Position p : raum.getGraphenPunkte()) {
+			this.gc.strokeOval((double)(p.getX() / 10.), (double)(p.getY() / 10.), 0.1, 0.1);
+			//System.out.println(p.getX()+" / "+p.getY());
 		}
 	}
 	
@@ -35,6 +46,7 @@ public class Zeichenwand extends Canvas{
 		this.setHeight(raum.getHoehe());
 		gc.clearRect(0, 0, this.getWidth(), this.getHeight());
 		zeichneKugeln();
+		zeichneGraphen();
 	}
 	
 }

@@ -66,7 +66,15 @@ public class Raum {
 	public double getRadius() {
 		return radius;
 	}
+	
+	
 
+	/**
+	 * @return the graphenPunkte
+	 */
+	public List<Position> getGraphenPunkte() {
+		return graphenPunkte;
+	}
 
 	/**
 	 * 
@@ -210,6 +218,7 @@ public class Raum {
 			
 		}
 		
+		findeKnoten(mglGraphenPunkte, knoten);
 		
 	}
 	
@@ -299,10 +308,19 @@ public class Raum {
 				knoten[x][y] = tmp;
 				
 				mglGraphenPunkte.offer(new Knoten(new Position(x, y+1), knoten[x][y].getZugehoerigeKugeln(), false));
+				mglGraphenPunkte.offer(new Knoten(new Position(x, y-1), knoten[x][y].getZugehoerigeKugeln(), false));
+				mglGraphenPunkte.offer(new Knoten(new Position(x+1, y), knoten[x][y].getZugehoerigeKugeln(), false));
+				mglGraphenPunkte.offer(new Knoten(new Position(x-1, y), knoten[x][y].getZugehoerigeKugeln(), false));
+				
 			}
 			else {
-				if(knoten[x][y].istTeilderKugel()) {
+				
+				if(knoten[x][y].istTeilderKugel() || knoten[x][y].equals(tmp)) {
 					continue;
+				}
+				else {
+					knoten[x][y].addKugeln(tmp.getZugehoerigeKugeln());
+					this.graphenPunkte.add(new Position(x,y));
 				}
 			}
 		}
