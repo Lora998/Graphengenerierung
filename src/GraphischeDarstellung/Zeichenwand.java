@@ -24,10 +24,10 @@ public class Zeichenwand extends Canvas{
 	
 	private void zeichneKugeln() {
 		this.gc.setStroke(Color.BLACK);
-		for(Kugel kugel: raum.getKugeln()) {
+		for(Kugel kugel: raum.getKugeln().values()) {
 			double radius = kugel.getRadius();
-			this.gc.strokeOval(kugel.getPosition().getX()-radius, 
-					kugel.getPosition().getY()-radius,
+			this.gc.strokeOval(kugel.getPosition().getX()-0.5*radius, 
+					kugel.getPosition().getY()-0.5*radius,
 					radius, radius);
 		}
 	}

@@ -131,7 +131,6 @@ public class Main extends Application {
 			if(ergebnis.isPresent()) {
 				this.raum = ergebnis.get();
 				zeichenwand.neuerRaum(this.raum);
-				System.out.println(raum.getGraphenPunkte().toString());
 				zeichenPane.setMaxSize(this.raum.getBreite(), this.raum.getHoehe());
 				this.fenster.sizeToScene();
 				dialog.close();

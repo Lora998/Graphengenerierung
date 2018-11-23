@@ -21,7 +21,7 @@ class KugelTest {
 	@Test
 	void testKugelKugel() {
 		
-		Kugel original = new Kugel(2, 3, 1.);
+		Kugel original = new Kugel(2, 3, 1., 0);
 		Kugel kopie = new Kugel(original);
 		
 		assertEquals(2, kopie.getPosition().getX());
@@ -34,11 +34,11 @@ class KugelTest {
 	 */
 	@Test
 	void testSindNachbarn() {
-		Kugel k1 = new Kugel(4, 4, 1.);
-		Kugel k2 = new Kugel(4, 4, 3.); 	// k1 liegt in k2
-		Kugel k3 = new Kugel(4, 6, 2.);		// k2 und k3 schneiden sich
-		Kugel k4 = new Kugel(6, 4, 1.);		// k1 und k4 beruehren sich in einem Punkt
-		Kugel k5 = new Kugel(20, 20, 1);	// k1 und k5 schneiden sich nirgendwo
+		Kugel k1 = new Kugel(4, 4, 1., 0);
+		Kugel k2 = new Kugel(4, 4, 3., 1); 	// k1 liegt in k2
+		Kugel k3 = new Kugel(4, 6, 2., 2);		// k2 und k3 schneiden sich
+		Kugel k4 = new Kugel(6, 4, 1., 3);		// k1 und k4 beruehren sich in einem Punkt
+		Kugel k5 = new Kugel(20, 20, 1, 4);	// k1 und k5 schneiden sich nirgendwo
 		
 		assertTrue(Graph.Kugel.sindNachbarn(k1, k2));
 		assertTrue(Graph.Kugel.sindNachbarn(k2, k3));

@@ -2,9 +2,11 @@ package Graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Queue;
@@ -20,7 +22,7 @@ public class Raum {
 	private double breite;
 	private int n; 		// Anzahl der Kugeln
 	private double radius;
-	private Set<Kugel> kugeln;
+	private HashMap<Integer, Kugel> kugeln;
 	private List<Position> graphenPunkte;
 	
 	
@@ -38,8 +40,8 @@ public class Raum {
 		this.radius = radius;
 		this.breite = breite;
 		this.hoehe = hoehe;
-		
-		kugeln = new HashSet<>();
+		this.graphenPunkte = new ArrayList<>();
+		kugeln = new HashMap<>();
 		if(!verteileKugeln()) {
 			throw new Exceptions.KugelException("Die Kugeln konnten nicht"
 					+ " akkurat verteilt werden.");
@@ -55,7 +57,7 @@ public class Raum {
 		return breite;
 	}
 
-	public Set<Kugel> getKugeln() {
+	public Map<Integer, Kugel> getKugeln() {
 		return kugeln;
 	}
 	
@@ -98,7 +100,7 @@ public class Raum {
 		
 		int versuche = 1000;
 		Random verteilung  = new Random(); 		// verwendet automatisch die aktuelle Systemzeit als Seed
-
+		int aktuellIndex = 1;
 		
 		 while(kugeln.size() < this.n && versuche > 0) {
 			 
@@ -106,7 +108,8 @@ public class Raum {
 			 double y = verteilung.nextDouble() * this.hoehe;
 			 
 			 if(istImRaum(x, y, this.radius)) {
-				kugeln.add(new Kugel(x, y, this.radius));
+				kugeln.put(aktuellIndex, new Kugel(x, y, this.radius, aktuellIndex));
+				aktuellIndex++;
 			} else {
 				versuche--;
 				System.out.println("x = "+x+"\t y = "+y);
@@ -124,207 +127,55 @@ public class Raum {
 	 * berechnet den Graphen durch die Kugeln
 	 */
 	private void findeGraphen() {
-		Knoten[][]  knoten = new Knoten[(int)(this.breite*10)][(int) (this.hoehe*10)];
-		for(Kugel k: kugeln) {
-			
-			/**
-			 * nutzt Bresenham-Algorithmus um auf dem Array die Außenlgrenzen der Kugeln zu makieren
-			 */
-			
-			int x0 = (int)k.getPosition().getX()*10, y0 = (int)k.getPosition().getY()*10, radius = (int) k.getRadius()*10;
-			int f = 1-radius, ddF_x = 0, ddf_y = -2*radius, x = 0, y = radius;
-			HashSet<Position> aussenrand = new HashSet<>();
-			
-			knoten[x0][y0+radius] = new Knoten(new Position(x0, y0+radius), k, true);
-			knoten[x0][y0-radius] = new Knoten(new Position(x0, y0-radius), k, true);
-			knoten[x0+radius][y0] = new Knoten(new Position(x0+radius, y0), k, true);
-			knoten[x0-radius][y0] = new Knoten(new Position(x0-radius, y0), k, true);
-			
-			aussenrand.add(new Position(x0, y0+radius));
-			aussenrand.add(new Position(x0, y0-radius));
-			aussenrand.add(new Position(x0+radius, y0));
-			aussenrand.add(new Position(x0-radius, y0));
-			
-			while(x < y) {
-				if(f >= 0) {
-					y--;
-					ddf_y +=2;
-					f+= ddf_y;
-				}
-				x++;
-				ddF_x += 2;
-				f += ddF_x+1;
-				
-				knoten[x0+x][y0+y] = new Knoten(new Position(x0+x, y0+y), k, true);
-				knoten[x0-x][y0+y] = new Knoten(new Position(x0-x, y0+y), k, true);
-				knoten[x0+x][y0-y] = new Knoten(new Position(x0+x, y0-y), k, true);
-				knoten[x0-x][y0-y] = new Knoten(new Position(x0-x, y0-y), k, true);
-				
-				knoten[x0+y][y0+x] = new Knoten(new Position(x0+y, y0+x), k, true);
-				knoten[x0-y][y0+x] = new Knoten(new Position(x0-y, y0+x), k, true);
-				knoten[x0+y][y0-x] = new Knoten(new Position(x0+y, y0-x), k, true);
-				knoten[x0-y][y0-x] = new Knoten(new Position(x0-y, y0-x), k, true);
-				
-				aussenrand.add(new Position(x0+x, y0+y));
-				aussenrand.add(new Position(x0-x, y0+y));
-				aussenrand.add(new Position(x0+x, y0-y));
-				aussenrand.add(new Position(x0-x, y0-y));
-				aussenrand.add(new Position(x0+y, y0+x));
-				aussenrand.add(new Position(x0-y, y0+x));
-				aussenrand.add(new Position(x0+y, y0-x));
-				aussenrand.add(new Position(x0-y, y0-x));
-				
-			}
-			
-			fuelleInnereKugel(k, knoten, x0, y0, radius);
-			k.setAussenrand(aussenrand);
+		int[][]  knoten = new int[(int)(this.breite*10)][(int) (this.hoehe*10)];
+		
+		Queue<Position> remaining = new LinkedList<>();
+		
+		for(Kugel k : kugeln.values()) {
 			
 			
-		}
-		
-		//muss getrennt werden, damit das innere der Kugeln bereits komplett ausgefüllt ist
-		
-		Queue<Knoten> mglGraphenPunkte = new LinkedList<>();
-		graphenPunkte = new ArrayList<>();
-		// Aussenrand aller Kugeln in die Queue
-		
-		for(Kugel k: kugeln) {
-			int x0 = (int)k.getPosition().getX()*10, y0 = (int)k.getPosition().getY()*10, radius = (int) k.getRadius()*10;
-			for(Position p: k.getAussenrand()) {
-				
-				// bei der Position direkt über oder unter der Kugel
-				if(p.getX() == x0) {
-					if(p.getY() == y0+radius ) {
-						mglGraphenPunkte.offer(new Knoten(new Position(p.getX(), p.getY()+1), k, false));
-					}
-					else {
-						mglGraphenPunkte.offer(new Knoten(new Position(p.getX(), p.getY()-1), k, false));
-					}
-				}
-				else {
-						
-					if(p.getX() < x0) {	
-						//links von
-						mglGraphenPunkte.offer(new Knoten(new Position(p.getX()-1, p.getY()), k, false));
-					}
-					else {
-						// rechts von
-						mglGraphenPunkte.offer(new Knoten(new Position(p.getX()+1, p.getY()), k, false));
-					}
-					
-				}
-				
-		 	}
+			int x = (int)k.getPosition().getX()*10;
+			int y = (int)k.getPosition().getY()*10;
+			knoten[x][y] = k.getIndex();
+			remaining.offer(new Position(x,y));
 			
-		}
-		
-		findeKnoten(mglGraphenPunkte, knoten);
-		
-	}
-	
-	/**
-	 * Füllt das Innere einer übergeben Kugel
-	 * @param k
-	 * mithilfe von
-	 * @param x0
-	 * @param y0
-	 * @param radius
-	 * in 
-	 * @param knoten
-	 */
-	
-	private void fuelleInnereKugel(Kugel k, Knoten[][] knoten, int x0, int y0, int radius) {
-		
-		// Mittelpunkt makieren
-		Position mittelpunkt = new Position(x0, y0);
-		knoten[x0][y0] = new Knoten(mittelpunkt, k, true);
-		
-		if(radius <= 1) {
-			return;
-		}
-		
-		Queue<Position> nochZuMakieren = new LinkedList<Position>();
-		
-		// oben, unten, rechts, links vom Punkt in die queue
-		
-		nochZuMakieren.offer(new Position(x0, y0+1));
-		nochZuMakieren.offer(new Position(x0, y0-1));
-		nochZuMakieren.offer(new Position(x0+1, y0));
-		nochZuMakieren.offer(new Position(x0-1, y0));
-		
-		while( !nochZuMakieren.isEmpty()) {
-			Position p = nochZuMakieren.poll();
-			if(knoten[(int)p.getX()][(int)p.getY()] != null) {
-				continue;
-			}
-			else {
-				// Knoten makieren
-				knoten[(int)p.getX()][(int)p.getY()] = new Knoten(p, k, true);
-				
-				Position oben = new Position(p.getX(), p.getY()+1);
-				Position unten = new Position(p.getX(), p.getY()-1);
-				Position rechts = new Position(p.getX()+1, p.getY());
-				Position links = new Position(p.getX()-1, p.getY());
-				 // umherliegende Punkte makieren
-				if(!nochZuMakieren.contains(oben)) {
-					nochZuMakieren.add(oben);
-				}
-				if(!nochZuMakieren.contains(unten)) {
-					nochZuMakieren.add(unten);
-				}
-				if(!nochZuMakieren.contains(rechts)) {
-					nochZuMakieren.add(rechts);
-				}
-				if(!nochZuMakieren.contains(links)) {
-					nochZuMakieren.add(links);
-				}
-			}
-		}
-		
-		
-	}
-	
-	
-	/**
-	 * 
-	 * @param mglGraphenPunkte
-	 * @param knoten
-	 */
-	 //TODO
-	private void findeKnoten(Queue<Knoten> mglGraphenPunkte, Knoten[][] knoten) {
-		
-		while(!mglGraphenPunkte.isEmpty()) {
-			
-			Knoten tmp = mglGraphenPunkte.poll();
-			int x = (int)tmp.getPosition().getX();
-			int y = (int)tmp.getPosition().getY();
-			
-			if(x < 0 || x >= knoten.length || y < 0 || y >= knoten[0].length) {
-				continue;
-			}
-			
-			if(knoten[x][y] == null) {
-				
-				knoten[x][y] = tmp;
-				
-				mglGraphenPunkte.offer(new Knoten(new Position(x, y+1), knoten[x][y].getZugehoerigeKugeln(), false));
-				mglGraphenPunkte.offer(new Knoten(new Position(x, y-1), knoten[x][y].getZugehoerigeKugeln(), false));
-				mglGraphenPunkte.offer(new Knoten(new Position(x+1, y), knoten[x][y].getZugehoerigeKugeln(), false));
-				mglGraphenPunkte.offer(new Knoten(new Position(x-1, y), knoten[x][y].getZugehoerigeKugeln(), false));
-				
-			}
-			else {
-				
-				if(knoten[x][y].istTeilderKugel() || knoten[x][y].equals(tmp)) {
+			for(Kugel l: kugeln.values()) {
+				if(k.equals(l)) {
 					continue;
 				}
-				else {
-					knoten[x][y].addKugeln(tmp.getZugehoerigeKugeln());
-					this.graphenPunkte.add(new Position(x,y));
+				if(Kugel.sindNachbarn(k, l)) {
+					k.addNachbar(l.getIndex());
 				}
 			}
 		}
-	}
+		
+		while(!remaining.isEmpty()) {
+			Position tmp = remaining.poll();
+			int x = (int)tmp.getX();
+			int y = (int)tmp.getY();
+			int index = knoten[x][y];
+			
+			int sin[] = {0, 1, 1, 1, 0, -1 , -1, 1};
+			int cos[] = {1, 1, 0, -1, -1, -1, 0, 1};
+			
+			for(int i = 0; i < 8; ++i) {
+				int x1 = x+sin[i];
+				int y1 = y+cos[i];
+				if(x1 < 0 || x1 >= knoten.length || y1 < 0 || y1 >= knoten[0].length) {
+					continue;
+				}
+				if(knoten[x1][y1] == 0) {
+					knoten[x1][y1] = index;
+					remaining.offer(new Position(x1, y1));
+				}
+				else {
+					if(knoten[x1][y1] != index && ! kugeln.get(index).istNachbarVon(knoten[x1][y1])) {
+						this.graphenPunkte.add(new Position(x1, y1));
+					}
+				}
+			}
 	
-
+	
+		}
+	}
 }
