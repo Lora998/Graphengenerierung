@@ -5,7 +5,7 @@ package Graph;
  *
  */
 
-public class Position {
+public class Position implements Comparable <Position>{
 	private double x;
 	private double y;
 	
@@ -78,5 +78,33 @@ public class Position {
 	 */
 	public static double getDistance(Position a, Position b) {
 		return Math.sqrt(((a.getX()-b.getX()) * (a.getX()-b.getX()) + (a.getY()-b.getY()) * (a.getY()-b.getY())));
+	}
+	
+	/**
+	 * 
+	 * @param p Position mit der verglichen wird
+	 * @return Prioritaet fuer Voronoi
+	 */
+	public int compareTo(Position p) {
+		if(this.y == p.y) {	// falls beide auf der gleichen y-Achse/Hoehe liegen
+			
+			if(this.x == p.x) {	//gleiche Position
+				return 0;
+			}
+
+			else if(this.x > p.x){	// Position liegt rechts von p
+				return 1;
+			}
+			
+			else {
+				return -1;
+			}
+			
+		}
+		
+		else if(this.y > p.y) {	// Position liegt ueber p
+			return 1;
+		}
+		return -1;
 	}
 }

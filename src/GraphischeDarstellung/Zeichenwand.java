@@ -34,7 +34,7 @@ public class Zeichenwand extends Canvas{
 	
 	private void zeichneGraphen() {
 		this.gc.setStroke(Color.RED);
-		for(Position p : raum.getGraphenPunkte()) {
+		for(Position p : raum.getFloodfill().getGraphenPunkte()) {
 			this.gc.strokeOval((double)(p.getX() / 10.), (double)(p.getY() / 10.), 0.1, 0.1);
 			//System.out.println(p.getX()+" / "+p.getY());
 		}
