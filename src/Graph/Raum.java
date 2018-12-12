@@ -1,14 +1,11 @@
 package Graph;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.Queue;
 
 /**
@@ -157,8 +154,10 @@ public class Raum {
 			
 			int sin[] = {0, 1, 1, 1, 0, -1 , -1, 1};
 			int cos[] = {1, 1, 0, -1, -1, -1, 0, 1};
+			//int sin[] = {0, 1, 0, -1};
+			//int cos[] = {1, 0, -1, 0};
 			
-			for(int i = 0; i < 8; ++i) {
+			for(int i = 0; i < sin.length; ++i) {
 				int x1 = x+sin[i];
 				int y1 = y+cos[i];
 				if(x1 < 0 || x1 >= knoten.length || y1 < 0 || y1 >= knoten[0].length) {
