@@ -31,10 +31,24 @@ public class Voronoi {
 		}
 		
 		this.kanten = new ArrayList<Kante>();
-		this.generiereVoronoi();
+		if(this.punkte.size() > 1) {
+			this.generiereVoronoi();
+		}
+		
 		
 	}
 	
+	
+	
+	/**
+	 * @return the kanten
+	 */
+	public List<Kante> getKanten() {
+		return kanten;
+	}
+
+
+
 	private void generiereVoronoi() {
 		
 		this.events = new PriorityQueue<Event>();
@@ -197,5 +211,142 @@ public class Voronoi {
 	
 	private void checkCircleEvent(Parabel b) {
 		
+		Parabel lp = Parabel.getLinkerVater(b);
+		Parabel rp = Parabel.getLinkerVater(b);
+		
+		if(lp == null || rp == null) {
+			return;
+		}
+		
+		Parabel a = Parabel.getLinkesKind(lp);
+		Parabel c = Parabel.getRechtesKind(rp);
+		
+		if( a == null || c == null || a.p == c.p) {
+			return;
+		}
+		
+		if(ccw(a.p, b.p, c.p) != 1) {
+			return;
+		}
+		
+		Position start = getKantenSchnitt(lp.kante, rp.kante);
+		if(start == null) {
+			return;
+		}
+		
+		double dx = b.p.getX() - start.getX();
+		double dy = b.p.getY() - start.getY();
+		double d = Math.sqrt((dx*dx) + (dy*dy));
+		
+		if(start.getY() + d < this.yAktuell) {
+			return;
+		}
+		
+		Position ep = new Position(start.getX(), start.getY() + d);
+		
+		Event e = new Event(ep, Event.CIRCLE_EVENT);
+		e.bogen = b;
+		b.event = e;
+		this.events.add(e);
+		
 	}
+	
+	public int ccw(Position a, Position b, Position c) {
+		
+		double area2 = (b.getX()-a.getX())*(c.getY()-a.getY()) - 
+				(b.getY()-a.getY())*(c.getX()-a.getX());
+		
+		if(area2 < 0) {
+			return -1;
+		}
+		else if(area2 > 0) {
+			return 1;
+		}
+		return 0;
+		
+	}
+	
+	private Position getKantenSchnitt(Kante a, Kante b) {
+		
+		if(b.steigung == a.steigung && b.yPosition != a.yPosition) {
+			return null;
+		}
+		
+		double x = (b.yPosition - a.yPosition) / (a.steigung-b.steigung);
+		double y = a.steigung*x + a.yPosition;
+		
+		return new Position(x, y);
+		
+	}
+	
+	private double getXKante(Parabel par) {
+		
+		Parabel links = Parabel.getLinkesKind(par);
+		Parabel rechts = Parabel.getRechtesKind(par);
+		
+		Position p = links.p;
+		Position r = rechts.p;
+		
+		double dp = 2*(p.getY() - this.yAktuell);
+		double a1 = 1/dp;
+		double b1 = -2*p.getX() / dp;
+		double c1 = (p.getX()*p.getX() + p.getY()*p.getY() - this.yAktuell*this.yAktuell) / dp;
+		
+		double dp2 = 2*(r.getY() - this.yAktuell);
+		double a2 = 1/dp2;
+		double b2 = -2*r.getX() / dp2;
+		double c2 = (r.getX()*r.getX() + r.getY() * r.getY() - this.yAktuell*this.yAktuell) / dp2;
+		
+		double a = a1-a2;
+		double b = b1-b2;
+		double c = c1-c2;
+		
+		double disc = b*b - 4*a*c;
+		double x1 = (-b + Math.sqrt(disc)) / (2*a);
+		double x2 = (-b - Math.sqrt(disc)) / (2*a);
+		
+		double ry;
+		if(p.getY() > r.getX()) {
+			ry = Math.max(x1,  x2);
+		}
+		else {
+			ry = Math.min(x1, x2);
+		}
+		
+		return ry;
+		
+	}
+	
+	private Parabel getParabelX(double xx) {
+		
+		Parabel par = this.wurzel;
+		double x = 0;
+		
+		while(par.typ == Parabel.IS_VERTEX) {
+			
+			x = getXKante(par);
+			if(x > xx) {
+				par = par.linkesKind;
+			}
+			else {
+				par = par.rechtesKind;
+			}
+			
+		}
+		
+		return par;
+		
+	}
+	
+	private double getY(Position p, double x) {
+		
+		double dp = 2*(p.getY() - this.yAktuell);
+		double a1 = 1/dp;
+		double b1 = -2*p.getX() / dp;
+		double c1 = (p.getX()*p.getX() + p.getY()*p.getY() - this.yAktuell*this.yAktuell) / dp;
+		
+		return (a1*x*x + b1*x + c1);
+		
+	}
+	
 }

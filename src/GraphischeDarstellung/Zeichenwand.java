@@ -2,6 +2,7 @@ package GraphischeDarstellung;
 
 
 
+import Graph.Kante;
 import Graph.Kugel;
 import Graph.Position;
 import Graph.Raum;
@@ -34,10 +35,16 @@ public class Zeichenwand extends Canvas{
 	
 	private void zeichneGraphen() {
 		this.gc.setStroke(Color.RED);
-		for(Position p : raum.getFloodfill().getGraphenPunkte()) {
-			this.gc.strokeOval((double)(p.getX() / 10.), (double)(p.getY() / 10.), 0.1, 0.1);
+		//for(Position p : raum.getFloodfill().getGraphenPunkte()) {
+		//	this.gc.strokeOval((double)(p.getX() / 10.), (double)(p.getY() / 10.), 0.1, 0.1);
 			//System.out.println(p.getX()+" / "+p.getY());
+		//}
+		for(Kante k : raum.getVoronoi().getKanten()) {
+			System.out.println(k.start.getX()+" / "+ k.ende.getX());
+			this.gc.strokeLine(k.start.getX(), k.start.getY(),
+					k.ende.getX(), k.ende.getY());
 		}
+		
 	}
 	
 	public void neuerRaum(Raum r) {

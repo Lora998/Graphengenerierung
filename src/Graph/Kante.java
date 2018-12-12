@@ -9,8 +9,8 @@ package Graph;
 
 public class Kante{
 	
-	Position start;
-	Position ende;
+	public Position start;
+	public Position ende;
 	Position linkeSeite;
 	Position rechteSeite;
 	Position richtung;

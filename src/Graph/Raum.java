@@ -21,7 +21,7 @@ public class Raum {
 	private double radius;
 	private HashMap<Integer, Kugel> kugeln;
 	private Floodfill floodfill;
-	private Voronoi v;
+	private Voronoi voronoi;
 	
 	
 	/**
@@ -43,7 +43,8 @@ public class Raum {
 			throw new Exceptions.KugelException("Die Kugeln konnten nicht"
 					+ " akkurat verteilt werden.");
 		}
-		this.floodfill = new Floodfill(this);
+	//	this.floodfill = new Floodfill(this);
+		this.voronoi = new Voronoi(this);
 	}
 	
 	public double getHoehe() {
@@ -71,6 +72,15 @@ public class Raum {
 	 */
 	public Floodfill getFloodfill() {
 		return floodfill;
+	}
+	
+	
+
+	/**
+	 * @return the voronoi
+	 */
+	public Voronoi getVoronoi() {
+		return voronoi;
 	}
 
 	/**

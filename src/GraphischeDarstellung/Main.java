@@ -47,9 +47,10 @@ public class Main extends Application {
 		this.fenster = primaryStage;
 		this.fenster.setTitle("Graphengenerierung");
 		Pane hauptFenster = new Pane();
+		
 		hauptFenster.setPadding(new Insets(8, 8, 8, 8));
 		this.raum = new Raum(0, 500, 500, 1);
-		
+
 		/*
 		 *erstellt Buttonleiste fuer grundlegende Funktionen 
 		 */
