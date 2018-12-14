@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import Exceptions.KugelException;
+
 import java.util.Queue;
 
 /**
@@ -32,7 +35,7 @@ public class Raum {
 	 * @param radius
 	 * @throws Exception
 	 */
-	public Raum(int n, double hoehe, double breite, double radius) throws Exception{
+	public Raum(int n, double hoehe, double breite, double radius) throws KugelException{
 		
 		this.n = n;
 		this.radius = radius;
@@ -40,10 +43,14 @@ public class Raum {
 		this.hoehe = hoehe;
 		kugeln = new HashMap<>();
 		if(!verteileKugeln()) {
+			this.n = 0;
+			this.radius = Math.max(1., this.radius);
+			this.breite = Math.max(this.breite, 10);
+			this.hoehe = Math.max(this.hoehe,  10);
 			throw new Exceptions.KugelException("Die Kugeln konnten nicht"
 					+ " akkurat verteilt werden.");
 		}
-	//	this.floodfill = new Floodfill(this);
+		this.floodfill = new Floodfill(this);
 		this.voronoi = new Voronoi(this);
 	}
 	

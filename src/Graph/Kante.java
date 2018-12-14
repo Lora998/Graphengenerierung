@@ -23,7 +23,8 @@ public class Kante{
 		this.start = start;
 		this.linkeSeite = links;
 		this.rechteSeite = rechts;
-		this.richtung = new Position(rechts.getY()-links.getY(), -(rechts.getX()-links.getX()));
+		this.richtung = new Position(rechts.getY()-links.getY(), 
+				-(rechts.getX()-links.getX()));
 		this.ende = null;
 		this.steigung = (rechts.getX()-links.getX()) / (links.getY()-rechts.getY());
 		Position mitte = new Position((rechts.getX()+links.getX()) / 2, (rechts.getY()+links.getY()) /2);

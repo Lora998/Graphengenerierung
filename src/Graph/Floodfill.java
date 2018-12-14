@@ -17,10 +17,12 @@ public class Floodfill {
 	
 	private Raum r;
 	private List<Position> graphenPunkte;
+	private long knotenAnzahl;
 	
 	public Floodfill(Raum r) {
 		this.r = r;
-		graphenPunkte = new ArrayList<>();
+		this.graphenPunkte = new ArrayList<>();
+		this.knotenAnzahl = 0;
 		this.findeGraphen();
 	}
 	
@@ -31,6 +33,13 @@ public class Floodfill {
 		return graphenPunkte;
 	}
 	
+	/**
+	 * @return the knotenAnzahl
+	 */
+	public long getKnotenAnzahl() {
+		return knotenAnzahl;
+	}
+
 	/**
 	 * berechnet den Graphen durch die Kugeln
 	 */
@@ -85,8 +94,33 @@ public class Floodfill {
 					}
 				}
 			}
-	
-	
 		}
+		bestimmeKnotenAnzahl(knoten);
 	}
+	
+private void bestimmeKnotenAnzahl(int knoten[][]){
+        
+        for(int i = 0; i < knoten.length - 1; i++){
+            for(int j = 0; j < knoten[0].length - 1; j++){
+                int a = knoten[i][j], b = knoten[i+1][j], c = knoten[i][j+1], d = knoten[i+1][j+1]; 
+
+                if( a != b){
+                    
+                    if( (a != c && b != c) || (a != d && b != d)){
+                        this.knotenAnzahl ++;
+                    }
+                    
+                }
+                else{   // a und b sind gleich
+                    
+                    if( c != d && ( a != c && a != d) ){
+                        this.knotenAnzahl ++;
+                    }
+                    
+                }
+            }
+        }
+        
+	}
+
 }

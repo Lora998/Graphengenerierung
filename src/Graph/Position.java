@@ -84,6 +84,7 @@ public class Position implements Comparable <Position>{
 	 * 
 	 * @param p Position mit der verglichen wird
 	 * @return Prioritaet fuer Voronoi
+	 * sortiert nach y-Koordinate
 	 */
 	public int compareTo(Position p) {
 		if(this.y == p.y) {	// falls beide auf der gleichen y-Achse/Hoehe liegen

@@ -35,16 +35,21 @@ public class Zeichenwand extends Canvas{
 	
 	private void zeichneGraphen() {
 		this.gc.setStroke(Color.RED);
-		//for(Position p : raum.getFloodfill().getGraphenPunkte()) {
-		//	this.gc.strokeOval((double)(p.getX() / 10.), (double)(p.getY() / 10.), 0.1, 0.1);
+		for(Position p : raum.getFloodfill().getGraphenPunkte()) {
+			this.gc.strokeOval((double)(p.getX() / 10.), (double)(p.getY() / 10.), 0.1, 0.1);
 			//System.out.println(p.getX()+" / "+p.getY());
-		//}
-		for(Kante k : raum.getVoronoi().getKanten()) {
+		}
+		/*for(Kante k : raum.getVoronoi().getKanten()) {
 			System.out.println(k.start.getX()+" / "+ k.ende.getX());
 			this.gc.strokeLine(k.start.getX(), k.start.getY(),
 					k.ende.getX(), k.ende.getY());
-		}
+		}*/
 		
+	}
+	
+	private void zeichneDaten() {
+		this.gc.setStroke(Color.BLUE);
+		this.gc.strokeText("Knoten Anzahl n = "+this.raum.getFloodfill().getKnotenAnzahl(), 0, 12);
 	}
 	
 	public void neuerRaum(Raum r) {
@@ -54,6 +59,7 @@ public class Zeichenwand extends Canvas{
 		gc.clearRect(0, 0, this.getWidth(), this.getHeight());
 		zeichneKugeln();
 		zeichneGraphen();
+		zeichneDaten();
 	}
 	
 }
